@@ -93,4 +93,20 @@ public class DadosWrapper {
     public void setMesoregion(String mesoregion) {
         this.mesoregion = mesoregion;
     }
+
+    @Override
+    public String toString() {
+        return "DadosWrapper{" +
+                "ibge_id=" + ibge_id +
+                ", uf='" + uf + '\'' +
+                ", name='" + name + '\'' +
+                ", capital='" + capital + '\'' +
+                ", lon='" + lon + '\'' +
+                ", lat='" + lat + '\'' +
+                ", no_accents='" + no_accents + '\'' +
+                ", alternative_names='" + alternative_names + '\'' +
+                ", microregion='" + microregion + '\'' +
+                ", mesoregion='" + mesoregion + '\'' +
+                '}';
+    }
 }

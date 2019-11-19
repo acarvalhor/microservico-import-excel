@@ -2,7 +2,7 @@ package com.microservico.microservicoimportexcel.resource;
 
 import java.util.List;
 
-import com.microservico.microservicoimportexcel.model.DataExcel;
+import com.microservico.microservicoimportexcel.model.City;
 import com.microservico.microservicoimportexcel.service.ReadCsvService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ public class ReadCsvResource {
 
     @PostMapping
     public ResponseEntity<?> readFileCsv(@RequestParam("file") MultipartFile file) {
-        List<DataExcel> list = this.readCsvService.contentFileCsv(file);
-        if (list.isEmpty()) {    
+        List<City> cityList = this.readCsvService.contentFileCsv(file);
+        if (cityList.isEmpty()) {    
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(cityList);
     }
 }

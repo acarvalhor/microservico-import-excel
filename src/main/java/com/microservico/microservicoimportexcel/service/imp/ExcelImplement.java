@@ -1,8 +1,11 @@
 package com.microservico.microservicoimportexcel.service.imp;
 
+import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -16,10 +19,12 @@ import java.util.List;
 @Service
 public class ExcelImplement implements ExcelService {
 
+    @Autowired
+    ExcelRepository excelRepository;
+
     @Override
     public List<DadosWrapper> csv(MultipartFile multipartFile) throws IOException {
         BufferedReader br;
-        List<String> result = new ArrayList<>();
         List<DadosWrapper> resultDadosWrappers = new ArrayList<>();
         try {
 
@@ -30,12 +35,10 @@ public class ExcelImplement implements ExcelService {
                 if(!line.startsWith("ibge_id")) {
                     String[] content = line.split(",");
                     resultDadosWrappers.add(buildTeste(content));
-                    result.add(line);
                 }
             }
-            for (DadosWrapper pessoa : resultDadosWrappers) {
-                System.out.println(pessoa.toString());
-            }
+
+            excelRepository.saveAll(resultDadosWrappers);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -44,19 +47,22 @@ public class ExcelImplement implements ExcelService {
     }
 
     private DadosWrapper buildTeste(String[] content) {
-        DadosWrapper dadosWrapper = new DadosWrapper();
-        dadosWrapper.setIbge_id(Double.valueOf(content[0]));
-        dadosWrapper.setUf(content[1]);
-        dadosWrapper.setName(content[2]);
-        dadosWrapper.setCapital(content[3]);
-        dadosWrapper.setLon(content[4]);
-        dadosWrapper.setLat(content[5]);
-        dadosWrapper.setNo_accents(content[6]);
-        dadosWrapper.setAlternative_names(content[7]);
-        dadosWrapper.setMicroregion(content[8]);
-        dadosWrapper.setMesoregion(content[9]);
-        return dadosWrapper;
+        return DadosWrapper.builder()
+                .ibge_id(Double.valueOf(content[0]))
+                .uf(content[1])
+                .name(content[2])
+                .capital(content[3])
+                .lon(content[4])
+                .lat(content[5])
+                .no_accents(content[6])
+                .alternative_names(content[7])
+                .microregion(content[8])
+                .mesoregion(content[9])
+                .build();
     }
 
-
+    @Override
+    public List<DadosWrapper> findCapitaisOrderByName() {
+        return excelRepository.findCapitaisOrderByName();
+    }
 }

@@ -3,10 +3,12 @@ package com.microservico.microservicoimportexcel.resource;
 import java.util.List;
 
 import com.microservico.microservicoimportexcel.model.City;
-import com.microservico.microservicoimportexcel.service.ReadCsvService;
+import com.microservico.microservicoimportexcel.service.imp.ReadCsvServiceImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,14 +20,30 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReadCsvResource {
 
     @Autowired
-    private ReadCsvService readCsvService;
+    private ReadCsvServiceImp readCsvService;
 
-    @PostMapping
+    @PostMapping("/upload")
     public ResponseEntity<?> readFileCsv(@RequestParam("file") MultipartFile file) {
-        List<City> cityList = this.readCsvService.contentFileCsv(file);
-        if (cityList.isEmpty()) {    
+        List<City> cities = this.readCsvService.saveContentFileCsv(file);
+        if (cities.isEmpty()) {    
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(cityList);
+        return ResponseEntity.ok(cities);
     }
+
+    @GetMapping("/capitals")
+    public ResponseEntity<?> get(Pageable pageable) {
+        List<City> cities = this.readCsvService.findAllCapitalsOrderByName(pageable);
+        if (cities.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(cities);
+    }
+
+    @GetMapping("/states")
+    public ResponseEntity<?> getStates() {
+        // [TODO] implementar
+        return null;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.microservico.microservicoimportexcel.repository;
 
+import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,10 @@ public interface ExcelRepository extends JpaRepository<DadosWrapper, Integer> {
 
     @Query("SELECT d FROM DadosWrapper d WHERE d.capital = 'TRUE' ORDER BY d.name")
     List<DadosWrapper> findCapitaisOrderByName();
+
+    @Query("SELECT COUNT(d) FROM DadosWrapper d WHERE d.uf = :uf")
+    Integer numberOfCityByState(String uf);
+
+    @Query("SELECT new DadosWrapper(COUNT(d), d.uf) FROM DadosWrapper d group by d.uf")
+    List<DadosWrapper> numberOfCityByState();
 }

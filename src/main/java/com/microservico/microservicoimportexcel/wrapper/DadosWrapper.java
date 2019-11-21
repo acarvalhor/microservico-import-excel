@@ -3,6 +3,7 @@ package com.microservico.microservicoimportexcel.wrapper;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "DadosCidade")
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DadosWrapper {
+public class DadosWrapper implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +27,13 @@ public class DadosWrapper {
     private String alternative_names;
     private String microregion;
     private String mesoregion;
+
+    @Transient
+    private Integer qtdCidades;
+
+    public DadosWrapper(long qtdCidades, String uf){
+        this.uf = uf;
+        this.qtdCidades = (int) qtdCidades;
+    }
 
 }

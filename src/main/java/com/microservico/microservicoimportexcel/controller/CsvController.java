@@ -2,6 +2,7 @@ package com.microservico.microservicoimportexcel.controller;
 
 import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
+import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,18 @@ public class CsvController {
     public ResponseEntity<?> findCapitaisOrderByName(){
         List<DadosWrapper> dadosWrapper = excelService.findCapitaisOrderByName();
         return ResponseEntity.ok(dadosWrapper);
+    }
+
+    @RequestMapping(value = "/biggerSmallerCity", method = RequestMethod.GET)
+    public ResponseEntity<?> findBiggerSmallerCityByState(){
+        List<CidadeEstadoWrapper> cidadeEstadoWrapper = excelService.findBiggerSmallerCityByState();
+        return ResponseEntity.ok(cidadeEstadoWrapper);
+    }
+
+    @RequestMapping(value = "/numberOfCityByState", method = RequestMethod.GET)
+    public ResponseEntity<?> numberOfCityByState(){
+        List<CidadeEstadoWrapper> cidadeEstadoWrapper = excelService.numberOfCityByState();
+        return ResponseEntity.ok(cidadeEstadoWrapper);
     }
     
 }

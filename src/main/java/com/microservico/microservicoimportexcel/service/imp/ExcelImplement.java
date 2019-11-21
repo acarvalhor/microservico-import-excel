@@ -2,19 +2,20 @@ package com.microservico.microservicoimportexcel.service.imp;
 
 import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
+import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ExcelImplement implements ExcelService {
@@ -65,4 +66,39 @@ public class ExcelImplement implements ExcelService {
     public List<DadosWrapper> findCapitaisOrderByName() {
         return excelRepository.findCapitaisOrderByName();
     }
+
+    @Override
+    public List<CidadeEstadoWrapper> findBiggerSmallerCityByState() {
+        ArrayList<CidadeEstadoWrapper> numeroCidadeByEstado = new ArrayList<>();
+        excelRepository.findCapitaisOrderByName().stream().forEach((dadosWrapper) -> {
+            Integer numeroCidades = excelRepository.numberOfCityByState(dadosWrapper.getUf());
+            CidadeEstadoWrapper cidadeEstadoWrapper = new CidadeEstadoWrapper().builder().
+                    numeroCidades(numeroCidades).nomeEstado(dadosWrapper.getUf()).build();
+            numeroCidadeByEstado.add(cidadeEstadoWrapper);
+
+        });
+
+        return   maiorMenorNumeroDeCidades(numeroCidadeByEstado);
+    }
+
+    private List<CidadeEstadoWrapper> maiorMenorNumeroDeCidades(ArrayList<CidadeEstadoWrapper> numeroCidadeByEstado) {
+        List<CidadeEstadoWrapper> listMaiorMenorValor = new ArrayList<>();
+        Collections.sort(numeroCidadeByEstado,MAIS_CIDADES);
+        listMaiorMenorValor.add(numeroCidadeByEstado.get(0));
+        Collections.sort(numeroCidadeByEstado,MENOS_CIDADES);
+        listMaiorMenorValor.add(numeroCidadeByEstado.get(numeroCidadeByEstado.size() - 1));
+      return listMaiorMenorValor;
+    }
+
+    @Override
+    public List<CidadeEstadoWrapper> numberOfCityByState() {
+       List<DadosWrapper> objects = excelRepository.numberOfCityByState();
+       List<CidadeEstadoWrapper> cidadeEstadoWrapperList =
+               objects.stream().map(dado -> new CidadeEstadoWrapper(dado.getQtdCidades(), dado.getUf())).collect(toList());
+
+        return cidadeEstadoWrapperList;
+    }
+
+    private static final Comparator<CidadeEstadoWrapper> MAIS_CIDADES = (a1, a2) -> a2.getNumeroCidades() - a1.getNumeroCidades();
+    private static final Comparator<CidadeEstadoWrapper> MENOS_CIDADES = (a1, a2) -> a2.getNumeroCidades() + a1.getNumeroCidades();
 }

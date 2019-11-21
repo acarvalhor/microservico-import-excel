@@ -5,7 +5,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.microservico.microservicoimportexcel.model.City;
+import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
 import com.microservico.microservicoimportexcel.repository.CityRepository;
 import com.microservico.microservicoimportexcel.service.ReadCsvService;
 
@@ -61,4 +64,9 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     public List<City> findAllCapitalsOrderByName(Pageable pageable) {
         return this.cityRepository.findAllByCapital("true", Sort.by("name").ascending());
     }
+
+	public List<CityWrapper> findStatesWithTheLargestAndSmallestNumberOfCities() {
+        List<CityWrapper> citiesWrapper = this.cityRepository.findStatesWithTheLargestAndSmallestNumberOfCities();
+        return null;
+	}
 }

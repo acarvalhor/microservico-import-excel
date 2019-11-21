@@ -3,6 +3,7 @@ package com.microservico.microservicoimportexcel.resource;
 import java.util.List;
 
 import com.microservico.microservicoimportexcel.model.City;
+import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
 import com.microservico.microservicoimportexcel.service.imp.ReadCsvServiceImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("csv")
+@RequestMapping("cities")
 public class ReadCsvResource {
 
     @Autowired
     private ReadCsvServiceImp readCsvService;
 
     @PostMapping("/upload")
-    public ResponseEntity<?> readFileCsv(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadFileCsv(@RequestParam("file") MultipartFile file) {
         List<City> cities = this.readCsvService.saveContentFileCsv(file);
         if (cities.isEmpty()) {    
             return ResponseEntity.badRequest().build();
@@ -32,7 +33,7 @@ public class ReadCsvResource {
     }
 
     @GetMapping("/capitals")
-    public ResponseEntity<?> get(Pageable pageable) {
+    public ResponseEntity<?> getCapitals(Pageable pageable) {
         List<City> cities = this.readCsvService.findAllCapitalsOrderByName(pageable);
         if (cities.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -40,9 +41,9 @@ public class ReadCsvResource {
         return ResponseEntity.ok(cities);
     }
 
-    @GetMapping("/states")
-    public ResponseEntity<?> getStates() {
-        // [TODO] implementar
+    @GetMapping("/statesWithTheLargestAndSmallestNumberOfCities")
+    public ResponseEntity<?> getStatesWithTheLargestAndSmallestNumberOfCities() {
+        List<CityWrapper> citiesWrapper = this.readCsvService.findStatesWithTheLargestAndSmallestNumberOfCities();
         return null;
     }
 

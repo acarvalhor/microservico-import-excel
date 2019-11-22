@@ -7,6 +7,7 @@ import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,6 +18,9 @@ public interface CityRepository extends PagingAndSortingRepository<City, Integer
     List<City> findAllByUf(String state);
     
     List<City> findAllByCapital(String capital, Sort sort);
+
+    @Query("SELECT c FROM City c WHERE c.name LIKE :text")
+    List<City> findAllColumnLikeTextSearch(String column, @Param("text") String textSearch);
 
     @Query(value = "SELECT new com.microservico.microservicoimportexcel.model.wrapper.CityWrapper(uf, COUNT(uf))" 
         + " FROM City GROUP BY uf")

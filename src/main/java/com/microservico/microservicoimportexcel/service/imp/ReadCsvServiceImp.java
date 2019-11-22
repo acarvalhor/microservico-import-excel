@@ -85,6 +85,11 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
             return true;
         }
 		return false;
+    }
+
+    @Override
+    public List<City> filterDataColumnFileCsv(String column, String textSearch) {
+		return this.cityRepository.findAllColumnLikeTextSearch(column, textSearch);
 	}
     
     private City buildCity(String[] dataFileCsv) {

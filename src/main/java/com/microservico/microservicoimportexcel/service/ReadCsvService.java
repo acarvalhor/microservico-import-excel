@@ -21,4 +21,6 @@ public interface ReadCsvService<T> {
     List<T> findAllCapitalsOrderByName(Pageable pageable);
 
     List<?> findStatesWithTheLargestAndSmallestNumberOfCities();
+
+    List<T> filterDataColumnFileCsv(String column, String search);
 }

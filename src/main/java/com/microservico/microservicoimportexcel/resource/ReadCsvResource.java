@@ -140,9 +140,12 @@ public class ReadCsvResource {
      * @return
      */
     @GetMapping("/filterDataColumnFileCsv")
-    public ResponseEntity<?> filterDataColumnFileCsv() {
-        // TODO implementar item 9
-        return null;
+    public ResponseEntity<?> filterDataColumnFileCsv(@RequestParam String column, @RequestParam String search) {
+        List<City> cities = this.readCsvService.filterDataColumnFileCsv(column, search);
+        if (cities.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(cities);
     }
 
 }

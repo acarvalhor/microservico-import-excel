@@ -19,4 +19,7 @@ public interface ExcelRepository extends JpaRepository<DadosWrapper, Integer> {
 
     @Query("SELECT new DadosWrapper(COUNT(d), d.uf) FROM DadosWrapper d group by d.uf")
     List<DadosWrapper> numberOfCityByState();
+
+    @Query("SELECT d FROM DadosWrapper d where d.ibge_id = :id")
+    List<DadosWrapper> dataCityByIdIBGE(Double id);
 }

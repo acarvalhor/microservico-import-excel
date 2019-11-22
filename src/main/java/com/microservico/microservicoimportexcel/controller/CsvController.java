@@ -1,15 +1,11 @@
 package com.microservico.microservicoimportexcel.controller;
 
-import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -44,5 +40,11 @@ public class CsvController {
         List<CidadeEstadoWrapper> cidadeEstadoWrapper = excelService.numberOfCityByState();
         return ResponseEntity.ok(cidadeEstadoWrapper);
     }
+
+    @RequestMapping(value = "/dataCityByIdIBGE/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> findDataCityByIdIBGE(@PathVariable Double id){
+        return ResponseEntity.ok(excelService.findDataCityByIdIBGE(id));
+    }
+
     
 }

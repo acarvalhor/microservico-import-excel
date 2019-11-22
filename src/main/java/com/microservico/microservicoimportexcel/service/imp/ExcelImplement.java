@@ -99,6 +99,12 @@ public class ExcelImplement implements ExcelService {
         return cidadeEstadoWrapperList;
     }
 
+    @Override
+    public List<DadosWrapper> findDataCityByIdIBGE(Double id) {
+        List<DadosWrapper> dadosWrappers = excelRepository.dataCityByIdIBGE(id);
+        return dadosWrappers;
+    }
+
     private static final Comparator<CidadeEstadoWrapper> MAIS_CIDADES = (a1, a2) -> a2.getNumeroCidades() - a1.getNumeroCidades();
     private static final Comparator<CidadeEstadoWrapper> MENOS_CIDADES = (a1, a2) -> a2.getNumeroCidades() + a1.getNumeroCidades();
 }

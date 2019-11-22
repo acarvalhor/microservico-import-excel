@@ -9,9 +9,13 @@ import java.util.List;
 
 public interface ExcelService {
 
- List<DadosWrapper> csv(MultipartFile multipartFile) throws IOException;
- List<DadosWrapper> findCapitaisOrderByName();
- List<CidadeEstadoWrapper> findBiggerSmallerCityByState();
- List<CidadeEstadoWrapper> numberOfCityByState();
+    List<DadosWrapper> csv(MultipartFile multipartFile) throws IOException;
 
+    List<DadosWrapper> findCapitaisOrderByName();
+
+    List<CidadeEstadoWrapper> findBiggerSmallerCityByState();
+
+    List<CidadeEstadoWrapper> numberOfCityByState();
+
+    List<DadosWrapper> findDataCityByIdIBGE(Double id);
 }

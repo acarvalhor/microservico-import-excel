@@ -1,0 +1,162 @@
+{
+	"variables": [],
+	"info": {
+		"name": "SENIOR SERVICE",
+		"_postman_id": "9a02072e-da3e-b898-c6c1-6504d84f5e12",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UPLOAD FILE CSV",
+			"request": {
+				"url": "http://localhost:9090/upload-service/v1/cities/upload",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "CAPITALS",
+			"request": {
+				"url": "http://localhost:9090/upload-service/v1/cities/capitals",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "STATES WITH THE LARGEST AND SMALLEST NUMBER OF CITIES",
+			"request": {
+				"url": "http://localhost:9090/upload-service/v1/cities/statesWithTheLargestAndSmallestNumberOfCities",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "STATES WITH NUMBER OF CITIES",
+			"request": {
+				"url": "http://localhost:9090/upload-service/v1/cities/statesWithNumberOfCities",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "SEARCH CITY BY CODE IBGE",
+			"request": {
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/searchCityByCodeIbge?code=5002704",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"searchCityByCodeIbge"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "5002704",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "SEARCH ALL CITIES BY STATE",
+			"request": {
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/searchAllCitiesByState?state=SP",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"searchAllCitiesByState"
+					],
+					"query": [
+						{
+							"key": "state",
+							"value": "SP",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "SAVE CITY",
+			"request": {
+				"url": "http://localhost:9090/upload-service/v1/cities/save",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"idIbge\": \"5002704\",\n    \"uf\": \"MS\",\n    \"name\": \"Campo Grande\",\n    \"capital\": \"true\",\n    \"lon\": \"-54.6157435665\",\n    \"lat\": \"-20.4580299879\",\n    \"noAcents\": \"Campo Grande\",\n    \"alternativeNames\": \"\",\n    \"microregion\": \"Campo Grande\",\n    \"mesoregion\": \"Centro Norte de Mato Grosso do Sul\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE CITY BY ID",
+			"request": {
+				"url": "http://localhost:9090/upload-service/v1/cities/delete/5119",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

@@ -3,6 +3,7 @@ package com.microservico.microservicoimportexcel.service.imp;
 import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
+import com.microservico.microservicoimportexcel.wrapper.CidadeWrapper;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,6 +104,22 @@ public class ExcelImplement implements ExcelService {
     public List<DadosWrapper> findDataCityByIdIBGE(Double id) {
         List<DadosWrapper> dadosWrappers = excelRepository.dataCityByIdIBGE(id);
         return dadosWrappers;
+    }
+
+    @Override
+    public List<CidadeWrapper> cityByUf(String uf) {
+        List<DadosWrapper> dadosWrappers = excelRepository.CitiesByUf(uf);
+
+        return builderCities(dadosWrappers);
+    }
+
+    private List<CidadeWrapper> builderCities(List<DadosWrapper> dadosWrappers) {
+        List<CidadeWrapper> cidadeWrappers = new ArrayList<>();
+        dadosWrappers.stream().forEach(dadosWrapper -> {
+            cidadeWrappers.add(CidadeWrapper.builder().nomeCidade(dadosWrapper.getName()).build());
+
+        });
+        return cidadeWrappers;
     }
 
     private static final Comparator<CidadeEstadoWrapper> MAIS_CIDADES = (a1, a2) -> a2.getNumeroCidades() - a1.getNumeroCidades();

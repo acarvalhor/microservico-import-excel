@@ -3,9 +3,7 @@ package com.microservico.microservicoimportexcel.service.imp;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import com.microservico.microservicoimportexcel.model.City;
 import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
@@ -13,8 +11,7 @@ import com.microservico.microservicoimportexcel.repository.CityRepository;
 import com.microservico.microservicoimportexcel.service.ReadCsvService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +22,7 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     private CityRepository cityRepository;
 
     @Override
-    public List<City> saveContentFileCsv(MultipartFile file) {
+    public List<City> saveAllContentFileCsv(MultipartFile file) {
         List<City> dataList = new ArrayList<>();
         String line = "";
         String csvSeparator = ",";
@@ -40,11 +37,56 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
             }
             this.cityRepository.saveAll(dataList);
         } catch (Exception e) {
-            e.printStackTrace();   
+            e.printStackTrace();
         }
         return dataList;
     }
 
+    @Override
+    public List<City> findAllCapitalsOrderByName(Pageable pageable) {
+        return this.cityRepository.findAllByCapital("true", Sort.by("name").ascending());
+    }
+
+    @Override
+    public List<CityWrapper> findStatesWithTheLargestAndSmallestNumberOfCities() {
+        List<CityWrapper> cityWrappers = this.getStatesWithNumberOfCities();
+        CityWrapper stateWithTheLargestNumberOfCities = cityWrappers.stream()
+            .max(Comparator.comparing(CityWrapper::getNumberOfCities)).orElseThrow(NoSuchElementException::new);
+        CityWrapper stateWithTheSmallestNumberOfCities = cityWrappers.stream()
+            .min(Comparator.comparing(CityWrapper::getNumberOfCities)).orElseThrow(NoSuchElementException::new);
+        return Arrays.asList(stateWithTheLargestNumberOfCities, stateWithTheSmallestNumberOfCities);
+    }
+
+    @Override
+    public List<CityWrapper> getStatesWithNumberOfCities() {
+		return this.cityRepository.findStatesWithNumberOfCities();
+    }
+    
+    @Override
+	public City findCityByCodeIbge(String codeIbge) {
+		return this.cityRepository.findByIdIbge(codeIbge);
+    }
+
+    @Override
+    public List<City> findAllCitiesByState(String state) {
+		return this.cityRepository.findAllByUf(state);
+	}
+    
+    @Override
+    public City saveCity(City city) {
+		return this.cityRepository.save(city);
+    }
+
+    @Override
+	public Boolean deleteCityById(Integer id) {
+        Optional<City> optionalCity = this.cityRepository.findById(id);
+        if (optionalCity.isPresent()) {
+            this.cityRepository.delete(optionalCity.get());
+            return true;
+        }
+		return false;
+	}
+    
     private City buildCity(String[] dataFileCsv) {
         return City.builder()
                 .idIbge(dataFileCsv[0])
@@ -59,14 +101,4 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
                 .mesoregion(dataFileCsv[9])
                 .build();
     }
-
-    @Override
-    public List<City> findAllCapitalsOrderByName(Pageable pageable) {
-        return this.cityRepository.findAllByCapital("true", Sort.by("name").ascending());
-    }
-
-	public List<CityWrapper> findStatesWithTheLargestAndSmallestNumberOfCities() {
-        List<CityWrapper> citiesWrapper = this.cityRepository.findStatesWithTheLargestAndSmallestNumberOfCities();
-        return null;
-	}
 }

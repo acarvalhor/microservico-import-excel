@@ -12,8 +12,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CityRepository extends PagingAndSortingRepository<City, Integer> {
     
+    City findByIdIbge(String idIbge);
+
+    List<City> findAllByUf(String state);
+    
     List<City> findAllByCapital(String capital, Sort sort);
 
-    @Query(nativeQuery = true, value = "SELECT NEW CityWrapper(uf AS state, COUNT(uf) AS number) FROM City GROUP BY uf")
-	List<CityWrapper> findStatesWithTheLargestAndSmallestNumberOfCities();
+    @Query(value = "SELECT new com.microservico.microservicoimportexcel.model.wrapper.CityWrapper(uf, COUNT(uf))" 
+        + " FROM City GROUP BY uf")
+	List<CityWrapper> findStatesWithNumberOfCities();
 }

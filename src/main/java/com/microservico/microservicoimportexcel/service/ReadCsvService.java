@@ -6,7 +6,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ReadCsvService<T> {
 
-    List<T> saveContentFileCsv(MultipartFile file);
+    T saveCity(T t);
+
+    Boolean deleteCityById(Integer id);
+
+    T findCityByCodeIbge(String codeIbge);
+
+    List<?> getStatesWithNumberOfCities();
+
+    List<T> findAllCitiesByState(String state);
+
+    List<T> saveAllContentFileCsv(MultipartFile file);
 
     List<T> findAllCapitalsOrderByName(Pageable pageable);
+
+    List<?> findStatesWithTheLargestAndSmallestNumberOfCities();
 }

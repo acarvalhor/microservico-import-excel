@@ -1,6 +1,6 @@
 package com.microservico.microservicoimportexcel.repository;
 
-import com.microservico.microservicoimportexcel.wrapper.CityName;
+import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

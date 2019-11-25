@@ -3,7 +3,6 @@ package com.microservico.microservicoimportexcel.service.imp;
 import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
-import com.microservico.microservicoimportexcel.wrapper.CityName;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

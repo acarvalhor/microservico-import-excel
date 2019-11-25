@@ -1,7 +1,6 @@
 package com.microservico.microservicoimportexcel.service;
 
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
-import com.microservico.microservicoimportexcel.wrapper.CityName;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.web.multipart.MultipartFile;
 

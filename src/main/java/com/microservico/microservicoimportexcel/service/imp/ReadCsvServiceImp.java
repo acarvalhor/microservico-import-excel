@@ -122,8 +122,9 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     private boolean verifyExistsColumn(String column) {
         Boolean existsColumn = false;
         switch(column.trim()) {
-            case "uf": case "name": case "idIbge": case "capital": case "lon": case "lat": case "noAcents":
-            case "alternativeNames": case "microregion": case "mesoregion":
+            case "uf": case "name": case "ibge_id": case "idIbge": case "capital": case "lon": case "lat": 
+            case "no_acents": case "noAcents": case "alternative_names": case "alternativeNames": 
+            case "microregion": case "mesoregion":
                 existsColumn = true;
                 break;
             default:

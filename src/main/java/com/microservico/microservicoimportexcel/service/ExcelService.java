@@ -1,6 +1,7 @@
 package com.microservico.microservicoimportexcel.service;
 
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
+import com.microservico.microservicoimportexcel.wrapper.CityName;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,4 +19,8 @@ public interface ExcelService {
     List<CidadeEstadoWrapper> numberOfCityByState();
 
     List<DadosWrapper> findDataCityByIdIBGE(Double id);
+
+    List<CityName> findCityByUf(String uf);
+
+    DadosWrapper insertDados(DadosWrapper dadosWrapper);
 }

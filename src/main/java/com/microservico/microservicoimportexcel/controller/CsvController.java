@@ -46,5 +46,9 @@ public class CsvController {
         return ResponseEntity.ok(excelService.findDataCityByIdIBGE(id));
     }
 
-    
+    @RequestMapping(value = "/cityNameByUF/{uf}", method = RequestMethod.GET)
+    public ResponseEntity<?> findCityByUf(@PathVariable String uf){
+        return ResponseEntity.ok(excelService.findCityByUf(uf));
+    }
+
 }

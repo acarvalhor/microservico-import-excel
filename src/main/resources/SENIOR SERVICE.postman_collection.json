@@ -1,16 +1,13 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "d8da75f2-b53e-46a8-b828-a787e0d299bb",
 		"name": "SENIOR SERVICE",
-		"_postman_id": "9a02072e-da3e-b898-c6c1-6504d84f5e12",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "UPLOAD FILE CSV",
 			"request": {
-				"url": "http://localhost:9090/upload-service/v1/cities/upload",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -18,52 +15,99 @@
 					"formdata": [
 						{
 							"key": "file",
-							"value": "",
-							"description": "",
-							"type": "file"
+							"type": "file",
+							"src": "/C:/Users/lsilva/Downloads/Trabalho Java - Cidades.csv"
 						}
 					]
 				},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"upload"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "CAPITALS",
 			"request": {
-				"url": "http://localhost:9090/upload-service/v1/cities/capitals",
 				"method": "GET",
 				"header": [],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/capitals",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"capitals"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "STATES WITH THE LARGEST AND SMALLEST NUMBER OF CITIES",
 			"request": {
-				"url": "http://localhost:9090/upload-service/v1/cities/statesWithTheLargestAndSmallestNumberOfCities",
 				"method": "GET",
 				"header": [],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/statesWithTheLargestAndSmallestNumberOfCities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"statesWithTheLargestAndSmallestNumberOfCities"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "STATES WITH NUMBER OF CITIES",
 			"request": {
-				"url": "http://localhost:9090/upload-service/v1/cities/statesWithNumberOfCities",
 				"method": "GET",
 				"header": [],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/statesWithNumberOfCities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"statesWithNumberOfCities"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "SEARCH CITY BY CODE IBGE",
 			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "http://localhost:9090/upload-service/v1/cities/searchCityByCodeIbge?code=5002704",
 					"protocol": "http",
@@ -80,23 +124,18 @@
 					"query": [
 						{
 							"key": "code",
-							"value": "5002704",
-							"equals": true,
-							"description": ""
+							"value": "5002704"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "SEARCH ALL CITIES BY STATE",
 			"request": {
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "http://localhost:9090/upload-service/v1/cities/searchAllCitiesByState?state=SP",
 					"protocol": "http",
@@ -113,50 +152,149 @@
 					"query": [
 						{
 							"key": "state",
-							"value": "SP",
-							"equals": true,
-							"description": ""
+							"value": "SP"
 						}
-					],
-					"variable": []
-				},
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"description": ""
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "SAVE CITY",
 			"request": {
-				"url": "http://localhost:9090/upload-service/v1/cities/save",
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"idIbge\": \"5002704\",\n    \"uf\": \"MS\",\n    \"name\": \"Campo Grande\",\n    \"capital\": \"true\",\n    \"lon\": \"-54.6157435665\",\n    \"lat\": \"-20.4580299879\",\n    \"noAcents\": \"Campo Grande\",\n    \"alternativeNames\": \"\",\n    \"microregion\": \"Campo Grande\",\n    \"mesoregion\": \"Centro Norte de Mato Grosso do Sul\"\n}"
+					"raw": "{\n    \"idIbge\": \"50027043\",\n    \"uf\": \"MS\",\n    \"name\": \"Campo Grande 2\",\n    \"capital\": \"true\",\n    \"lon\": \"-54.6157435665\",\n    \"lat\": \"-20.4580299879\",\n    \"noAcents\": \"Campo Grande\",\n    \"alternativeNames\": \"\",\n    \"microregion\": \"Campo Grande\",\n    \"mesoregion\": \"Centro Norte de Mato Grosso do Sul\"\n}"
 				},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"save"
+					]
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "DELETE CITY BY ID",
+			"name": "DELETE CITY",
 			"request": {
-				"url": "http://localhost:9090/upload-service/v1/cities/delete/5119",
 				"method": "DELETE",
 				"header": [],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/delete/5566",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"delete",
+						"5566"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FILTER DATA COLUMN FILE CSV",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/filterDataColumnFileCsv?column=uf&search=MS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"filterDataColumnFileCsv"
+					],
+					"query": [
+						{
+							"key": "column",
+							"value": "uf"
+						},
+						{
+							"key": "search",
+							"value": "MS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NUMBER OF RECORDS PER COLUMN CSV",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/numberOfRecordsPerColumn?column=alternativeNames",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"numberOfRecordsPerColumn"
+					],
+					"query": [
+						{
+							"key": "column",
+							"value": "alternativeNames"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NUMBER TOTAL OF RECORDS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/upload-service/v1/cities/numberTotalOfRecords",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"upload-service",
+						"v1",
+						"cities",
+						"numberTotalOfRecords"
+					]
+				}
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

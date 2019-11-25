@@ -7,9 +7,10 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityWrapper implements Serializable {
+public class StateWrapper implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private String name;
+    
+    private String state;
+    private Long numberOfCities;
 }

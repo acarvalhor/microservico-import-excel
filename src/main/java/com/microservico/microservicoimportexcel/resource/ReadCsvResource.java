@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.microservico.microservicoimportexcel.model.City;
 import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
+import com.microservico.microservicoimportexcel.model.wrapper.ResponseWrapper;
+import com.microservico.microservicoimportexcel.model.wrapper.StateWrapper;
 import com.microservico.microservicoimportexcel.service.imp.ReadCsvServiceImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,7 @@ public class ReadCsvResource {
      */
     @GetMapping("/statesWithTheLargestAndSmallestNumberOfCities")
     public ResponseEntity<?> getStatesWithTheLargestAndSmallestNumberOfCities() {
-        List<CityWrapper> citiesWrapper = this.readCsvService.findStatesWithTheLargestAndSmallestNumberOfCities();
+        List<StateWrapper> citiesWrapper = this.readCsvService.findStatesWithTheLargestAndSmallestNumberOfCities();
         if (citiesWrapper.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -73,7 +75,7 @@ public class ReadCsvResource {
      */
     @GetMapping("/statesWithNumberOfCities")
     public ResponseEntity<?> getStatesWithNumberOfCities() {
-        List<CityWrapper> citiesWrapper = this.readCsvService.getStatesWithNumberOfCities();
+        List<StateWrapper> citiesWrapper = this.readCsvService.getStatesWithNumberOfCities();
         if (citiesWrapper.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -101,11 +103,11 @@ public class ReadCsvResource {
      */
     @GetMapping("/searchAllCitiesByState")
     public ResponseEntity<?> searchCitiesByState(@RequestParam String state) {
-        List<City> cities = this.readCsvService.findAllCitiesByState(state);
-        if (cities.isEmpty()) {
+        List<CityWrapper> citiesWrappers = this.readCsvService.findAllCitiesByState(state);
+        if (citiesWrappers.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(cities);
+        return ResponseEntity.ok(citiesWrappers);
     }
 
     /**
@@ -127,11 +129,11 @@ public class ReadCsvResource {
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> saveCity(@PathVariable("id") Integer id) {
-        Boolean deleted = this.readCsvService.deleteCityById(id);
-        if (!deleted) {
+        ResponseWrapper response = this.readCsvService.deleteCityById(id);
+        if (response == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok("Successfully deleted city!");
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -142,10 +144,36 @@ public class ReadCsvResource {
     @GetMapping("/filterDataColumnFileCsv")
     public ResponseEntity<?> filterDataColumnFileCsv(@RequestParam String column, @RequestParam String search) {
         List<City> cities = this.readCsvService.filterDataColumnFileCsv(column, search);
-        if (cities.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+        if (cities.isEmpty() || cities == null) {
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(cities);
+    }
+
+     /**
+     * 10. Retornar a quantidade de registro baseado em uma coluna. Não deve contar itens iguais;
+     * @return
+     */
+    @GetMapping("/numberOfRecordsPerColumn")
+    public ResponseEntity<?> numberOfRecordsPerColumn(@RequestParam String column) {
+        ResponseWrapper response = this.readCsvService.findNumberOfRecordsPerColumn(column);
+        if (response == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 11. Retornar a quantidade de registros total;
+     * @return
+     */
+    @GetMapping("/numberTotalOfRecords")
+    public ResponseEntity<?> numberTotalOfRecords() {
+        ResponseWrapper response = this.readCsvService.findNumberTotalOfRecords();
+        if (response == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(response);
     }
 
 }

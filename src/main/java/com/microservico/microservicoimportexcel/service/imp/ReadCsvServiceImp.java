@@ -4,12 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-
-import com.microservico.microservicoimportexcel.model.City;
-import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import com.microservico.microservicoimportexcel.model.*;
+import com.microservico.microservicoimportexcel.model.wrapper.*;
 import com.microservico.microservicoimportexcel.repository.CityRepository;
 import com.microservico.microservicoimportexcel.service.ReadCsvService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ReadCsvServiceImp implements ReadCsvService<City> {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private CityRepository cityRepository;
@@ -48,17 +51,17 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     }
 
     @Override
-    public List<CityWrapper> findStatesWithTheLargestAndSmallestNumberOfCities() {
-        List<CityWrapper> cityWrappers = this.getStatesWithNumberOfCities();
-        CityWrapper stateWithTheLargestNumberOfCities = cityWrappers.stream()
-            .max(Comparator.comparing(CityWrapper::getNumberOfCities)).orElseThrow(NoSuchElementException::new);
-        CityWrapper stateWithTheSmallestNumberOfCities = cityWrappers.stream()
-            .min(Comparator.comparing(CityWrapper::getNumberOfCities)).orElseThrow(NoSuchElementException::new);
+    public List<StateWrapper> findStatesWithTheLargestAndSmallestNumberOfCities() {
+        List<StateWrapper> stateWrappers = this.getStatesWithNumberOfCities();
+        StateWrapper stateWithTheLargestNumberOfCities = stateWrappers.stream()
+            .max(Comparator.comparing(StateWrapper::getNumberOfCities)).orElseThrow(NoSuchElementException::new);
+        StateWrapper stateWithTheSmallestNumberOfCities = stateWrappers.stream()
+            .min(Comparator.comparing(StateWrapper::getNumberOfCities)).orElseThrow(NoSuchElementException::new);
         return Arrays.asList(stateWithTheLargestNumberOfCities, stateWithTheSmallestNumberOfCities);
     }
 
     @Override
-    public List<CityWrapper> getStatesWithNumberOfCities() {
+    public List<StateWrapper> getStatesWithNumberOfCities() {
 		return this.cityRepository.findStatesWithNumberOfCities();
     }
     
@@ -68,7 +71,7 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     }
 
     @Override
-    public List<City> findAllCitiesByState(String state) {
+    public List<CityWrapper> findAllCitiesByState(String state) {
 		return this.cityRepository.findAllByUf(state);
 	}
     
@@ -78,19 +81,56 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     }
 
     @Override
-	public Boolean deleteCityById(Integer id) {
+	public ResponseWrapper deleteCityById(Integer id) {
         Optional<City> optionalCity = this.cityRepository.findById(id);
         if (optionalCity.isPresent()) {
             this.cityRepository.delete(optionalCity.get());
-            return true;
+            return ResponseWrapper.builder().message("Successfully deleted city!").build();
         }
-		return false;
+		return null;
     }
 
     @Override
     public List<City> filterDataColumnFileCsv(String column, String textSearch) {
-		return this.cityRepository.findAllColumnLikeTextSearch(column, textSearch);
+        List<City> cities = new ArrayList<>();
+        if (verifyExistsColumn(column)) {
+            StringBuilder query = new StringBuilder("SELECT c FROM City c WHERE c.")
+                .append(column).append(" LIKE '%").append(textSearch).append("%'");
+            cities.addAll(this.entityManager.createQuery(query.toString(), City.class)
+                .getResultList());
+        } 
+        return cities;
+    }
+    
+    @Override
+    public ResponseWrapper findNumberOfRecordsPerColumn(String column) {
+        Integer totalRecords = 0;
+        if(verifyExistsColumn(column)) {
+            StringBuilder query = new StringBuilder("SELECT COUNT(c.").append(column).append(") FROM City c WHERE c.")
+                .append(column).append(" IS NOT NULL AND c.").append(column).append(" != ''");
+            totalRecords = this.entityManager.createQuery(query.toString(), Long.class)
+                .getSingleResult().intValue();
+        }
+        return totalRecords != 0 ? ResponseWrapper.builder()
+            .message("Number of column records [" + column + "]: " + totalRecords).build() : null;
+    }
+
+    public ResponseWrapper findNumberTotalOfRecords() {
+		return ResponseWrapper.builder().message("Number total of records: " + this.cityRepository.count()).build();
 	}
+    
+    private boolean verifyExistsColumn(String column) {
+        Boolean existsColumn = false;
+        switch(column.trim()) {
+            case "uf": case "name": case "idIbge": case "capital": case "lon": case "lat": case "noAcents":
+            case "alternativeNames": case "microregion": case "mesoregion":
+                existsColumn = true;
+                break;
+            default:
+                break;
+        }
+        return existsColumn;
+    }
     
     private City buildCity(String[] dataFileCsv) {
         return City.builder()

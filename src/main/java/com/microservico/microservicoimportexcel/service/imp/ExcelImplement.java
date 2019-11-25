@@ -1,5 +1,6 @@
 package com.microservico.microservicoimportexcel.service.imp;
 
+import com.microservico.microservicoimportexcel.exception.NotFoundException;
 import com.microservico.microservicoimportexcel.repository.ExcelRepository;
 import com.microservico.microservicoimportexcel.service.ExcelService;
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
@@ -9,12 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -23,6 +29,9 @@ public class ExcelImplement implements ExcelService {
 
     @Autowired
     ExcelRepository excelRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Override
     public List<DadosWrapper> csv(MultipartFile multipartFile) throws IOException {
@@ -114,7 +123,53 @@ public class ExcelImplement implements ExcelService {
 
     @Override
     public DadosWrapper insertDados(DadosWrapper dadosWrapper) {
-        return null;
+        return excelRepository.save(dadosWrapper);
+    }
+
+    @Override
+    public String deleteDados(DadosWrapper dadosWrapper) {
+        try {
+            excelRepository.delete(dadosWrapper);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return "Dados Excluídos com Sucesso";
+    }
+
+    @Override
+    public List<DadosWrapper> finByColumn(String column, String text){
+        if (ValidateColumn(column)) {
+            return entityManager.createNativeQuery(
+                    "SELECT d.* FROM dados_cidade d WHERE d." + column + " like '%" + text + "%'", DadosWrapper.class).getResultList();
+        }
+       throw new NotFoundException("Nome da Coluna Incorreto");
+    }
+
+    private boolean ValidateColumn(String column) {
+        switch (column) {
+            case "alternative_names":
+            case "capital":
+            case "ibge_id":
+            case "lat":
+            case "long":
+            case "mesoregion":
+            case "microregion":
+            case "name":
+            case "no_accents":
+            case "uf":
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Long findNumberOfRecordsByColumn(String column) {
+        if (ValidateColumn(column)) {
+            return entityManager.createQuery(
+                    "SELECT COUNT(d) FROM DadosWrapper d WHERE d." + column + " IS NOT NULL", Long.class).getSingleResult();
+        }
+        throw new NotFoundException("Nome da Coluna Incorreto");
     }
 
     private static final Comparator<CidadeEstadoWrapper> MAIS_CIDADES = (a1, a2) -> a2.getNumeroCidades() - a1.getNumeroCidades();

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ExcelRepository extends JpaRepository<DadosWrapper, Integer> {
@@ -26,4 +27,6 @@ public interface ExcelRepository extends JpaRepository<DadosWrapper, Integer> {
 
     @Query("SELECT new com.microservico.microservicoimportexcel.wrapper.CityName(d.name) FROM DadosWrapper d where d.uf = :uf")
     List<CityName> findCityByUf(String uf);
+
+
 }

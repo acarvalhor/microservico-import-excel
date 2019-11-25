@@ -10,12 +10,9 @@ import java.io.Serializable;
 @Data
 @Builder
 @NoArgsConstructor
-public class CityName implements Serializable {
+@AllArgsConstructor
+public class CityName{
 
     private String cityName;
-
-    public CityName(String cityName){
-        this.cityName = cityName;
-    }
 
 }

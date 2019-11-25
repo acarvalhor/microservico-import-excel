@@ -51,4 +51,24 @@ public class CsvController {
         return ResponseEntity.ok(excelService.findCityByUf(uf));
     }
 
+    @RequestMapping(value = "/insertDados", method = RequestMethod.POST)
+    public ResponseEntity<?> saveDados(@RequestBody DadosWrapper dadosWrapper){
+        return ResponseEntity.ok(excelService.insertDados(dadosWrapper));
+    }
+
+    @RequestMapping(value = "/deleteDados", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@RequestBody DadosWrapper dadosWrapper){
+        return ResponseEntity.ok(excelService.deleteDados(dadosWrapper));
+    }
+
+    @RequestMapping(value = "/finByColumn", method = RequestMethod.POST)
+    public ResponseEntity<?> finByColumn(@RequestParam String column,@RequestParam String text) throws Exception {
+        return ResponseEntity.ok(excelService.finByColumn(column, text));
+    }
+
+    @RequestMapping(value = "/numberOfRecordsByColumn", method = RequestMethod.POST)
+    public ResponseEntity<?> findNumberOfRecordsByColumn(@RequestParam String column) throws Exception {
+        return ResponseEntity.ok(excelService.findNumberOfRecordsByColumn(column));
+    }
+
 }

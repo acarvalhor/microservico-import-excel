@@ -71,4 +71,14 @@ public class CsvController {
         return ResponseEntity.ok(excelService.findNumberOfRecordsByColumn(column));
     }
 
+    @RequestMapping(value = "/totalRecords", method = RequestMethod.POST)
+    public ResponseEntity<?> findTotalRecords() {
+        return ResponseEntity.ok(excelService.findTotalRecords());
+    }
+
+    @RequestMapping(value = "/maxMinDistance", method = RequestMethod.POST)
+    public ResponseEntity<?> findmaxMinDistance() {
+        return ResponseEntity.ok(excelService.maxMinDistance());
+    }
+
 }

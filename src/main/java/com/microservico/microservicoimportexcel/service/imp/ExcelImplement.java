@@ -6,13 +6,13 @@ import com.microservico.microservicoimportexcel.service.ExcelService;
 import com.microservico.microservicoimportexcel.wrapper.CidadeEstadoWrapper;
 import com.microservico.microservicoimportexcel.wrapper.CityName;
 import com.microservico.microservicoimportexcel.wrapper.DadosWrapper;
+import com.microservico.microservicoimportexcel.wrapper.DistanciaDadoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +32,9 @@ public class ExcelImplement implements ExcelService {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    @Autowired
+    CalcLatLong calcLatLong;
 
     @Override
     public List<DadosWrapper> csv(MultipartFile multipartFile) throws IOException {
@@ -167,9 +170,34 @@ public class ExcelImplement implements ExcelService {
     public Long findNumberOfRecordsByColumn(String column) {
         if (ValidateColumn(column)) {
             return entityManager.createQuery(
-                    "SELECT COUNT(d) FROM DadosWrapper d WHERE d." + column + " IS NOT NULL", Long.class).getSingleResult();
+                    "SELECT COUNT(d) FROM DadosWrapper d WHERE d." + column + " IS NOT NULL and d." + column + "!='' ", Long.class).getSingleResult();
         }
         throw new NotFoundException("Nome da Coluna Incorreto");
+    }
+
+    @Override
+    public Long findTotalRecords() {
+        return entityManager.createQuery(
+                "SELECT COUNT(d) FROM DadosWrapper d", Long.class).getSingleResult();
+
+    }
+
+    @Override
+    public DistanciaDadoWrapper maxMinDistance() {
+        findTotal().stream().forEach((dadosWrapper1) -> {
+            findTotal().stream().forEach((dadosWrapper2) -> {
+               Long calculDistancia =
+                       calcLatLong.calculaDIstancia(Double.parseDouble(dadosWrapper1.getLat()),Double.parseDouble(dadosWrapper1.getLon()),
+                               Double.parseDouble(dadosWrapper2.getLat()),Double.parseDouble((dadosWrapper2.getLon())));
+            });
+        });
+        return null;
+    }
+
+    public List<DadosWrapper> findTotal() {
+        return entityManager.createQuery(
+                "SELECT d FROM DadosWrapper d", DadosWrapper.class).getResultList();
+
     }
 
     private static final Comparator<CidadeEstadoWrapper> MAIS_CIDADES = (a1, a2) -> a2.getNumeroCidades() - a1.getNumeroCidades();

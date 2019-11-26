@@ -10,6 +10,8 @@ import com.microservico.microservicoimportexcel.model.*;
 import com.microservico.microservicoimportexcel.model.wrapper.*;
 import com.microservico.microservicoimportexcel.repository.CityRepository;
 import com.microservico.microservicoimportexcel.service.ReadCsvService;
+import com.microservico.microservicoimportexcel.utils.GeoUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -115,10 +117,27 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
             .message("Number of column records [" + column + "]: " + totalRecords).build() : null;
     }
 
+    @Override
     public ResponseWrapper findNumberTotalOfRecords() {
 		return ResponseWrapper.builder().message("Number total of records: " + this.cityRepository.count()).build();
-	}
+    }
     
+    @Override
+    public ResponseCityWrapper getTheTwoFurthestCitiesBasedOnLocation() {
+        /*double distance = 0;
+        Iterable<City> cities = this.cityRepository.findAll();
+        cities.forEach(city -> {
+            cities.forEach(citySelected -> {
+                if (!city.equals(citySelected)) {
+                    distance = GeoUtils.builder().latitude(Double.valueOf(city.getLat()))
+                        .longititude(Double.valueOf(city.getLon())).build().distanceInKm(GeoUtils.builder()
+                        .latitude(Double.valueOf(citySelected.getLat())).longititude(Double.valueOf(citySelected.getLon())).build());
+                }
+            });
+        });*/
+		return null;
+	}
+
     private boolean verifyExistsColumn(String column) {
         Boolean existsColumn = false;
         switch(column.trim()) {

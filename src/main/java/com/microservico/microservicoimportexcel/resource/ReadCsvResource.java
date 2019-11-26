@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.microservico.microservicoimportexcel.model.City;
 import com.microservico.microservicoimportexcel.model.wrapper.CityWrapper;
+import com.microservico.microservicoimportexcel.model.wrapper.ResponseCityWrapper;
 import com.microservico.microservicoimportexcel.model.wrapper.ResponseWrapper;
 import com.microservico.microservicoimportexcel.model.wrapper.StateWrapper;
 import com.microservico.microservicoimportexcel.service.imp.ReadCsvServiceImp;
@@ -170,6 +171,20 @@ public class ReadCsvResource {
     @GetMapping("/numberTotalOfRecords")
     public ResponseEntity<?> numberTotalOfRecords() {
         ResponseWrapper response = this.readCsvService.findNumberTotalOfRecords();
+        if (response == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 12. Dentre todas as cidades, obter as duas cidades mais distantes uma da outra com base 
+     * na localização (distância em KM em linha reta);
+     * @return
+     */
+    @GetMapping("/getTheTwoFurthestCitiesBasedOnLocation")
+    public ResponseEntity<?> getTheTwoFurthestCitiesBasedOnLocation() {
+        ResponseCityWrapper response = this.readCsvService.getTheTwoFurthestCitiesBasedOnLocation();
         if (response == null) {
             return ResponseEntity.noContent().build();
         }

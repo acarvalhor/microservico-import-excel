@@ -11,7 +11,6 @@ import com.microservico.microservicoimportexcel.model.wrapper.*;
 import com.microservico.microservicoimportexcel.repository.CityRepository;
 import com.microservico.microservicoimportexcel.service.ReadCsvService;
 import com.microservico.microservicoimportexcel.utils.GeoUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -124,19 +123,26 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     
     @Override
     public ResponseCityWrapper getTheTwoFurthestCitiesBasedOnLocation() {
-        /*double distance = 0;
-        Iterable<City> cities = this.cityRepository.findAll();
-        cities.forEach(city -> {
-            cities.forEach(citySelected -> {
-                if (!city.equals(citySelected)) {
-                    distance = GeoUtils.builder().latitude(Double.valueOf(city.getLat()))
-                        .longititude(Double.valueOf(city.getLon())).build().distanceInKm(GeoUtils.builder()
-                        .latitude(Double.valueOf(citySelected.getLat())).longititude(Double.valueOf(citySelected.getLon())).build());
-                }
-            });
-        });*/
+        List<ResponseCityWrapper> responseCityWrappers = new ArrayList<>();
+        //SELECT * FROM city WHERE longitude = (SELECT MAX(c.longitude) FROM city c);
+        //SELECT * FROM city WHERE longitude = (SELECT MIN(c.longitude) FROM city c);
 		return null;
-	}
+    }
+    
+    private ResponseCityWrapper buildResponseCityWrapper(City cityMax, City cityMin) {
+        return ResponseCityWrapper.builder().citiesWrapper(Arrays.asList(buildCity(cityMax), buildCity(cityMin)))
+            .distance(distanceInKm(cityMax, cityMin)).build();
+    }
+
+    private Double distanceInKm(City city, City city2) {
+        return GeoUtils.builder().latitude(Double.valueOf(city.getLat()))
+            .longititude(Double.valueOf(city.getLon())).build().distanceInKm(GeoUtils.builder()
+            .latitude(Double.valueOf(city2.getLat())).longititude(Double.valueOf(city2.getLon())).build());
+    }
+
+    private CityWrapper buildCity(City city) {
+        return CityWrapper.builder().name(city.getName()).build();
+    }
 
     private boolean verifyExistsColumn(String column) {
         Boolean existsColumn = false;

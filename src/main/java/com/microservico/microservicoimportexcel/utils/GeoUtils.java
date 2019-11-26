@@ -25,9 +25,9 @@ public class GeoUtils {
                 * Math.sin(secondLatToRad)) * EARTH_RADIUS_KM;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         GeoUtils geo1 = GeoUtils.builder().latitude(-7.5932225939).longititude(-72.9165010261).build();
         GeoUtils geo2 = GeoUtils.builder().latitude(-3.8520214008).longititude(-32.4351863281).build();
         System.out.println("Distância entre " + geo1 + " e " + geo2 + ": " + geo1.distanceInKm(geo2));
-    }
+    }*/
 }

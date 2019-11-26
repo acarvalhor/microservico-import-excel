@@ -17,10 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -184,19 +181,48 @@ public class ExcelImplement implements ExcelService {
 
     @Override
     public DistanciaDadoWrapper maxMinDistance() {
-        findTotal().stream().forEach((dadosWrapper1) -> {
-            findTotal().stream().forEach((dadosWrapper2) -> {
-               Long calculDistancia =
-                       calcLatLong.calculaDIstancia(Double.parseDouble(dadosWrapper1.getLat()),Double.parseDouble(dadosWrapper1.getLon()),
-                               Double.parseDouble(dadosWrapper2.getLat()),Double.parseDouble((dadosWrapper2.getLon())));
-            });
-        });
+        DadosWrapper dadosWrapper = maxLat();
+        System.out.println(dadosWrapper);
+//        List<DadosWrapper> list = new ArrayList<>();
+//        list.stream().forEach((dadosWrapper1) -> {
+//            list.stream().forEach((dadosWrapper2) -> {
+//                if (!dadosWrapper1.equals(dadosWrapper2)){
+//                    Long calculDistancia =
+//                            calcLatLong.calculaDIstancia(Double.parseDouble(dadosWrapper1.getLat()),Double.parseDouble(dadosWrapper1.getLon()),
+//                                    Double.parseDouble(dadosWrapper2.getLat()),Double.parseDouble((dadosWrapper2.getLon())));
+//                }
+//            });
+//        });
         return null;
     }
 
+    public DadosWrapper maxLat() {
+        return (DadosWrapper) entityManager.createNativeQuery(
+                "SELECT * from dados_cidade WHERE lat = (select MAX(d.lat) FROM dados_cidade d)", DadosWrapper.class).getSingleResult();
+
+    }
+
+    public DadosWrapper minLat() {
+        return (DadosWrapper) entityManager.createNativeQuery(
+                "SELECT * from dados_cidade WHERE lat = (select MIN(d.lat) FROM dados_cidade d)", DadosWrapper.class).getSingleResult();
+
+    }
+
+    public DadosWrapper maxLon() {
+        return (DadosWrapper) entityManager.createNativeQuery(
+                "SELECT * from dados_cidade WHERE lon = (select MAX(d.lon) FROM dados_cidade d)", DadosWrapper.class).getSingleResult();
+
+    }
+
+    public DadosWrapper minLon() {
+        return (DadosWrapper) entityManager.createNativeQuery(
+                "SELECT * from dados_cidade WHERE lon = (select MIN(d.lon) FROM dados_cidade d)", DadosWrapper.class).getSingleResult();
+
+    }
+
     public List<DadosWrapper> findTotal() {
-        return entityManager.createQuery(
-                "SELECT d FROM DadosWrapper d", DadosWrapper.class).getResultList();
+        return entityManager.createNativeQuery(
+                "SELECT d.* FROM dados_cidade d LIMIT 100", DadosWrapper.class).getResultList();
 
     }
 

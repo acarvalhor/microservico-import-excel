@@ -21,9 +21,12 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
 
     @PersistenceContext
     private EntityManager entityManager;
+    private CityRepository cityRepository;
 
     @Autowired
-    private CityRepository cityRepository;
+    public ReadCsvServiceImp(CityRepository cityRepository) {
+        this.cityRepository = cityRepository;
+    }
 
     @Override
     public List<City> saveAllContentFileCsv(MultipartFile file) {

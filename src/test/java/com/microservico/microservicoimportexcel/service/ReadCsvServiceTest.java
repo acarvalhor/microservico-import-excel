@@ -1,11 +1,14 @@
 package com.microservico.microservicoimportexcel.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.microservico.microservicoimportexcel.model.City;
 import com.microservico.microservicoimportexcel.service.imp.ReadCsvServiceImp;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -23,7 +26,9 @@ public class ReadCsvServiceTest {
 
     @Test
     public void shouldSaveCity() {
-        //TODO implementar tests
+        Mockito.when(this.service.saveCity(city)).thenReturn(city);
+        this.service.saveCity(city);
+        assertEquals("1", city.getId());
     }
 
     private City buildCity() {

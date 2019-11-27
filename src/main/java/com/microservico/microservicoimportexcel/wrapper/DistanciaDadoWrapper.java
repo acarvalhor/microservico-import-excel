@@ -11,12 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DistanciaDadoWrapper {
 
-    private Double latInicial;
-    private Double longInicial;
-    private String cidadeLatLongInicial;
-    private String ufLatLongInicial;
-    private Double latFinal;
-    private Double longFinal;
-    private String cidadeLatLongFinal;
-    private String ufLatLongFinal;
+
+    private String cidadeMaisDistante1;
+    private String  cidadeMaisDistante2;
+
 }

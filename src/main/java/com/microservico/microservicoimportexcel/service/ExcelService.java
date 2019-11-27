@@ -33,5 +33,5 @@ public interface ExcelService {
 
     Long findTotalRecords();
 
-    DistanciaDadoWrapper maxMinDistance();
+    DistanciaDadoWrapper findMaxDistance();
 }

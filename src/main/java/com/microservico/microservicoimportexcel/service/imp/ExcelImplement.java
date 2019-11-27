@@ -180,32 +180,10 @@ public class ExcelImplement implements ExcelService {
     }
 
     @Override
-    public DistanciaDadoWrapper maxMinDistance() {
-        DadosWrapper dadosWrapper = maxLat();
-        System.out.println(dadosWrapper);
-//        List<DadosWrapper> list = new ArrayList<>();
-//        list.stream().forEach((dadosWrapper1) -> {
-//            list.stream().forEach((dadosWrapper2) -> {
-//                if (!dadosWrapper1.equals(dadosWrapper2)){
-//                    Long calculDistancia =
-//                            calcLatLong.calculaDIstancia(Double.parseDouble(dadosWrapper1.getLat()),Double.parseDouble(dadosWrapper1.getLon()),
-//                                    Double.parseDouble(dadosWrapper2.getLat()),Double.parseDouble((dadosWrapper2.getLon())));
-//                }
-//            });
-//        });
-        return null;
-    }
-
-    public DadosWrapper maxLat() {
-        return (DadosWrapper) entityManager.createNativeQuery(
-                "SELECT * from dados_cidade WHERE lat = (select MAX(d.lat) FROM dados_cidade d)", DadosWrapper.class).getSingleResult();
-
-    }
-
-    public DadosWrapper minLat() {
-        return (DadosWrapper) entityManager.createNativeQuery(
-                "SELECT * from dados_cidade WHERE lat = (select MIN(d.lat) FROM dados_cidade d)", DadosWrapper.class).getSingleResult();
-
+    public DistanciaDadoWrapper findMaxDistance() {
+        DadosWrapper dadosWrapper1 = maxLon();
+        DadosWrapper dadosWrapper2 = minLon();
+        return DistanciaDadoWrapper.builder().cidadeMaisDistante1(dadosWrapper1.getName()).cidadeMaisDistante2(dadosWrapper2.getName()).build();
     }
 
     public DadosWrapper maxLon() {

@@ -124,11 +124,23 @@ public class ReadCsvServiceImp implements ReadCsvService<City> {
     @Override
     public ResponseCityWrapper getTheTwoFurthestCitiesBasedOnLocation() {
         List<ResponseCityWrapper> responseCityWrappers = new ArrayList<>();
-        //SELECT * FROM city WHERE longitude = (SELECT MAX(c.longitude) FROM city c);
-        //SELECT * FROM city WHERE longitude = (SELECT MIN(c.longitude) FROM city c);
-		return null;
+        responseCityWrappers.addAll(Arrays.asList(buildCityLatitude(), buildCityLongitude()));
+        return responseCityWrappers.stream().max(Comparator.comparing(ResponseCityWrapper::getDistance))
+            .orElseThrow(NoSuchElementException::new);
     }
     
+    private ResponseCityWrapper buildCityLongitude() {
+        City cityMaxLongitude = this.cityRepository.findCityMaxLongitude();
+        City cityMinLongitude = this.cityRepository.findCityMinLongitude();
+        return buildResponseCityWrapper(cityMaxLongitude, cityMinLongitude);
+    }
+
+    private ResponseCityWrapper buildCityLatitude() {
+        City cityMaxLongitude = this.cityRepository.findCityMaxLatitude();
+        City cityMinLongitude = this.cityRepository.findCityMinLatitude();
+        return buildResponseCityWrapper(cityMaxLongitude, cityMinLongitude);
+    }
+
     private ResponseCityWrapper buildResponseCityWrapper(City cityMax, City cityMin) {
         return ResponseCityWrapper.builder().citiesWrapper(Arrays.asList(buildCity(cityMax), buildCity(cityMin)))
             .distance(distanceInKm(cityMax, cityMin)).build();

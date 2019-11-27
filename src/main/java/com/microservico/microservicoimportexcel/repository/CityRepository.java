@@ -25,4 +25,16 @@ public interface CityRepository extends PagingAndSortingRepository<City, Integer
     @Query(value = "SELECT new com.microservico.microservicoimportexcel.model.wrapper.StateWrapper(uf, COUNT(uf))" 
         + " FROM City GROUP BY uf")
 	List<StateWrapper> findStatesWithNumberOfCities();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM city WHERE longitude = (SELECT MAX(c.longitude) FROM city c)")
+	City findCityMaxLongitude();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM city WHERE longitude = (SELECT MIN(c.longitude) FROM city c)")
+	City findCityMinLongitude();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM city WHERE latitude = (SELECT MAX(c.latitude) FROM city c)")
+	City findCityMaxLatitude();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM city WHERE latitude = (SELECT MIN(c.latitude) FROM city c)")
+	City findCityMinLatitude();
 }
